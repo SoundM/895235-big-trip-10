@@ -3,10 +3,12 @@ import {createSiteMenuTemplate} from './components/site-menu.js';
 import {createSortingTemplate} from './components/sorting';
 import {createFilterTemplate} from './components/filter.js';
 import {createListEventsTemplate} from './components/list-event.js';
-import {createItemEventTemplate} from './components/item-event.js';
+import {createPointTemplate} from './components/point.js';
 import {createEventEditTemplate} from './components/event-edit.js';
-
-const TASK_COUNT = 3;
+import {createDayTemplate} from './components/day';
+import {generatePoints} from './mock/point';
+import {generateDays} from './mock/day';
+import {DAYS_COUNT, POINT_COUNT} from './const';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -29,8 +31,15 @@ render(eventsElement, createEventEditTemplate(), `beforeEnd`);
 render(eventsElement, createListEventsTemplate(), `beforeEnd`);
 
 const contentsDaysElement = eventsElement.querySelector(`.trip-days`);
+const days = generateDays(DAYS_COUNT);
+days.slice(0, DAYS_COUNT).forEach((day) => render(contentsDaysElement, createDayTemplate(day), `afterBegin`));
+// new Array(TASK_COUNT)
+//   .fill(createDayTemplate())
+//   .forEach((element) => render(contentsDaysElement, element, `afterBegin`)
+//   );
 
-new Array(TASK_COUNT)
-  .fill(createItemEventTemplate())
-  .forEach((element) => render(contentsDaysElement, element, `beforeEnd`)
-  );
+const pointsElement = document.querySelector(`.trip-events__list`);
+const points = generatePoints(POINT_COUNT);
+points.slice(0, POINT_COUNT).forEach((point) => render(pointsElement, createPointTemplate(point), `beforeEnd`));
+
+
